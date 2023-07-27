@@ -2,25 +2,23 @@
 import axios from "axios";
 var benimIP;
 
-
 // ------------ değiştirmeyin --------------
 // licensed to Ergineer 2022
 require("babel-core/register");
 require("babel-polyfill");
-async function ipAdresimiAl(){
-	await axios({
-		method: 'get',
-		url: 'https://apis.ergineer.com/ipadresim',
-	})
-	.then(function (response) {
-		return response.data
-	})
-	.then(function (a) {
-		benimIP=a
-	});
-}				
+async function ipAdresimiAl() {
+  await axios({
+    method: "get",
+    url: "https://apis.ergineer.com/ipadresim",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (a) {
+      benimIP = a;
+    });
+}
 // ------------ değiştirmeyin --------------
-
 
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
@@ -30,7 +28,6 @@ async function ipAdresimiAl(){
 	NOT: Bilgisayarın IP adresini öğrenmek için: https://apis.ergineer.com/ipadresim 
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
 */
-const myID = 176.88.148.57;
 
 /*
 	ADIM 2: Geri döndürülen verileri inceleyin, bu sizin ip bilgileriniz! Bileşen fonksiyonunuzu geliştirmek içindeki bu veri yapısını
@@ -68,31 +65,78 @@ const myID = 176.88.148.57;
 	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
 */
 
-
-
 //kodlar buraya gelecek
-const axios1 = () => {
-	axios
-	  .get("https://apis.ergineer.com/ipgeoapi/176.88.148.57")
-	  .then((response) => {
-		let data = response;
-		data
-		  .map((veri) => {
-			cardOlustur(veri);
-		  })
-		  .forEach((veriler) => {});
-	  });
-  };
-  axios1();
+//1.
+async function ipAdresimiAl2() {
+  await axios({
+    method: "get",
+    url: "https://apis.ergineer.com/176.88.148.57",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (a) {
+      benimIP = a;
+    });
+}
 
-  const bayrakOlustur = (bayrak) => {
-	const div1 = document.createElement("div");
-	div1.classList.add("card");
-  
-	const img = document.createElement("img");
-	img.src = bayrak.data["ülkebayrağı"];
-	div1.appendChild("img");
-  
-	const cardInfo1 = document.createElement("div");
-	cardInfo1.classList.add("card-info");
-  };
+//3.
+function createIPCard(data) {
+  const cardDiv = document.createElement("div");
+  cardDiv.className = "card";
+
+  const img = document.createElement("img");
+  img.src = "https://flagsapi.com/TR/shiny/64.png";
+  cardDiv.appendChild(img);
+
+  const cardInfoDiv = document.createElement("div");
+  cardInfoDiv.className = "card-info";
+
+  const ipH3 = document.createElement("h3");
+  ipH3.className = "ip";
+  ipH3.textContent = data.ip;
+  cardInfoDiv.appendChild(ipH3);
+
+  const countryP = document.createElement("p");
+  countryP.className = "ulke";
+  countryP.textContent = data.country_code;
+  cardInfoDiv.appendChild(countryP);
+
+  const latitudeP = document.createElement("p");
+  latitudeP.textContent = "Enlem: " + data.enlem + " Boylam: " + data.boylam;
+  cardInfoDiv.appendChild(latitudeP);
+
+  const cityP = document.createElement("p");
+  cityP.textContent = "Şehir: " + data.şehir;
+  cardInfoDiv.appendChild(cityP);
+
+  const timezoneP = document.createElement("p");
+  timezoneP.textContent = "Saat dilimi: " + data.saatdilimi;
+  cardInfoDiv.appendChild(timezoneP);
+
+  const currencyP = document.createElement("p");
+  currencyP.textContent = "Para birimi: " + data.parabirimi;
+  cardInfoDiv.appendChild(currencyP);
+
+  const ispP = document.createElement("p");
+  ispP.textContent = "ISP: " + data.isp;
+  cardInfoDiv.appendChild(ispP);
+
+  cardDiv.appendChild(cardInfoDiv);
+  return cardDiv;
+}
+//4.
+async function addIPCardToDOM() {
+  await ipAdresimiAl();
+  const url = "https://apis.ergineer.com/ipgeoapi/" + benimIP;
+  try {
+    const response = await axios.get(url);
+    const data = response.data;
+    const ipCard = createIPCard(data);
+    document.querySelector(".cards").appendChild(ipCard);
+  } catch (error) {
+    console.error("Error while fetching IP address details:", error);
+  }
+}
+//5.
+addIPCardToDOM();
