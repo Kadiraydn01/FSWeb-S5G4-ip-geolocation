@@ -1,5 +1,5 @@
 //axios import buraya gelecek
-
+import axios from "axios";
 var benimIP;
 
 
@@ -30,6 +30,7 @@ async function ipAdresimiAl(){
 	NOT: Bilgisayarın IP adresini öğrenmek için: https://apis.ergineer.com/ipadresim 
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
 */
+const myID = 176.88.148.57;
 
 /*
 	ADIM 2: Geri döndürülen verileri inceleyin, bu sizin ip bilgileriniz! Bileşen fonksiyonunuzu geliştirmek içindeki bu veri yapısını
@@ -70,3 +71,28 @@ async function ipAdresimiAl(){
 
 
 //kodlar buraya gelecek
+const axios1 = () => {
+	axios
+	  .get("https://apis.ergineer.com/ipgeoapi/176.88.148.57")
+	  .then((response) => {
+		let data = response;
+		data
+		  .map((veri) => {
+			cardOlustur(veri);
+		  })
+		  .forEach((veriler) => {});
+	  });
+  };
+  axios1();
+
+  const bayrakOlustur = (bayrak) => {
+	const div1 = document.createElement("div");
+	div1.classList.add("card");
+  
+	const img = document.createElement("img");
+	img.src = bayrak.data["ülkebayrağı"];
+	div1.appendChild("img");
+  
+	const cardInfo1 = document.createElement("div");
+	cardInfo1.classList.add("card-info");
+  };
